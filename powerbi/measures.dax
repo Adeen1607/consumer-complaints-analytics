@@ -1,0 +1,38 @@
+Complaints :=
+DISTINCTCOUNT ( fact_complaints[Complaint ID] )
+
+Timely Responses :=
+SUM ( fact_complaints[is_timely] )
+
+Timely Response Rate :=
+DIVIDE ( [Timely Responses], [Complaints] )
+
+Disputed Responses :=
+SUM ( fact_complaints[is_disputed] )
+
+Dispute Rate :=
+DIVIDE ( [Disputed Responses], [Complaints] )
+
+Average Days to Company :=
+AVERAGE ( fact_complaints[days_to_company] )
+
+Narrative Consent Records :=
+CALCULATE (
+    [Complaints],
+    fact_complaints[Consumer consent provided?] = "Consent provided"
+)
+
+Previous Month Complaints :=
+CALCULATE (
+    [Complaints],
+    DATEADD ( dim_date[Date], -1, MONTH )
+)
+
+Monthly Complaint Change % :=
+DIVIDE (
+    [Complaints] - [Previous Month Complaints],
+    [Previous Month Complaints]
+)
+
+Latest Complaint Date :=
+MAX ( fact_complaints[Date received] )
