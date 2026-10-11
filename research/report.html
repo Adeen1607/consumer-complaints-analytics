@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Consumer Complaint Reporting</title><link rel="stylesheet" href="style.css"></head><body><header><div><p class="meta">Mohammed Adeen Shaik · Research and coursework</p><h1>Consumer Complaint Reporting</h1><nav><a href="index.html">Overview</a><a href="report.html">Research report</a><a href="notebooks.html">Explained notebooks</a><a href="https://github.com/Adeen1607/consumer-complaints-analytics">Source repository</a></nav></div></header><main><h1 id="consumer-complaint-reporting">Consumer Complaint Reporting</h1>
+<p><strong>Author:</strong> Mohammed Adeen Shaik<br />
+<strong>Review date:</strong> 11 October 2026</p>
+<h2 id="research-question">Research question</h2>
+<p>How can complaint volumes and response patterns be summarized without exposing narratives?</p>
+<h2 id="data-and-provenance">Data and provenance</h2>
+<p>CFPB Consumer Complaint Database; raw data is downloaded separately.</p>
+<p>Source materials are linked from the repository README. Input fingerprints are recorded in <a href="evidence.json">the evidence manifest</a> so a reader can identify the exact committed artifacts used in this review.</p>
+<h2 id="method-and-analytical-rationale">Method and analytical rationale</h2>
+<p>Chunked CSV ingestion retains structured fields, filters the reporting window and combines group counts before calculating rates.</p>
+<h2 id="findings-and-interpretation">Findings and interpretation</h2>
+<p>Evidence status: historical outputs or implementation only. Numerical findings are limited to the original artifacts; no new model performance is claimed.</p>
+<h2 id="limitations">Limitations</h2>
+<p>Complaint counts need market-share denominators for company comparisons. Missing dispute or response flags must not be confused with observed negative outcomes. No empirical findings are claimed before source data is processed.</p>
+<h2 id="reproduction">Reproduction</h2>
+<p>Use the setup commands and input contract in the <a href="https://github.com/Adeen1607/consumer-complaints-analytics#readme">repository README</a>. Open the <a href="notebooks.html">notebook catalogue</a> for annotated code and saved outputs. Keep raw records and model binaries local; public reports contain aggregate results or source-embedded figures.</p>
+<h2 id="final-visual-results">Final visual results</h2>
+<p>No verified numerical result figure is available in the current evidence. This status is shown explicitly rather than substituting fabricated data.</p><footer>Evidence dates and limitations are documented in the report. Static pages display saved outputs; they do not execute Python, R, Streamlit or API calls.</footer></main></body></html>

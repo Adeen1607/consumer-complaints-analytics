@@ -1,0 +1,11 @@
+{
+  "repository": "Adeen1607/consumer-complaints-analytics",
+  "review_date": "2026-10-11",
+  "evidence_note": "Evidence status: historical outputs or implementation only. Numerical findings are limited to the original artifacts; no new model performance is claimed.",
+  "inputs": [
+    {
+      "path": "notebooks/key_visuals.ipynb",
+      "sha256": "44a7318b371131992c0443557925e405043c0cec47ef59357032f837ad9ec72e"
+    }
+  ]
+}
