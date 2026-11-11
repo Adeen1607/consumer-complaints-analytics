@@ -35,6 +35,7 @@ def aggregate(frame: pd.DataFrame, dimensions: list[str]) -> pd.DataFrame:
             complaints=("Complaint ID", "count"),
             timely_responses=("is_timely", "sum"),
             disputed_responses=("is_disputed", "sum"),
+            dispute_observations=("is_disputed", "count"),
         )
         .reset_index()
     )
@@ -45,13 +46,13 @@ def combine(parts: list[pd.DataFrame], dimensions: list[str]) -> pd.DataFrame:
     merged = pd.concat(parts, ignore_index=True)
     merged = (
         merged.groupby(dimensions, dropna=False)[
-            ["complaints", "timely_responses", "disputed_responses"]
+            ["complaints", "timely_responses", "disputed_responses", "dispute_observations"]
         ]
         .sum()
         .reset_index()
     )
     merged["timely_response_rate"] = merged["timely_responses"] / merged["complaints"]
-    merged["dispute_rate"] = merged["disputed_responses"] / merged["complaints"]
+    merged["dispute_rate"] = merged["disputed_responses"] / merged["dispute_observations"].replace(0, float("nan"))
     return merged.sort_values("complaints", ascending=False)
 
 
@@ -101,7 +102,10 @@ def build_model(
             chunk["Date sent to company"] - chunk["Date received"]
         ).dt.days
         chunk["is_timely"] = chunk["Timely response?"].eq("Yes").astype(int)
-        chunk["is_disputed"] = chunk["Consumer disputed?"].eq("Yes").astype(int)
+        # Recent records may have no dispute outcome. Unknown is not "No".
+        chunk["is_disputed"] = chunk["Consumer disputed?"].map(
+            {"Yes": 1, "No": 0}
+        ).astype("Int64")
 
         chunk.to_csv(
             fact_path,
