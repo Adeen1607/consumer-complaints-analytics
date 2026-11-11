@@ -10,8 +10,11 @@ DIVIDE ( [Timely Responses], [Complaints] )
 Disputed Responses :=
 SUM ( fact_complaints[is_disputed] )
 
+Dispute Observations :=
+COUNT ( fact_complaints[is_disputed] )
+
 Dispute Rate :=
-DIVIDE ( [Disputed Responses], [Complaints] )
+DIVIDE ( [Disputed Responses], [Dispute Observations] )
 
 Average Days to Company :=
 AVERAGE ( fact_complaints[days_to_company] )

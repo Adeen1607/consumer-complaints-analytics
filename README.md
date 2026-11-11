@@ -46,6 +46,8 @@ python src/build_model.py --start-date 2023-01-01
 
 ## Interpretation
 
+Dispute outcomes are missing for many recent complaints. Dispute rates use only records with an explicit Yes or No outcome; a blank rate means no observed dispute outcomes, not a zero dispute rate.
+
 Complaint counts are not equivalent to complaint rates. Without reliable customer, account, or market-share denominators, this project reports volume and response behaviour rather than ranking firms by consumer harm. Publication and response timing can also change historical totals.
 
 
