@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import pandas as pd
 
@@ -56,16 +57,13 @@ def combine(parts: list[pd.DataFrame], dimensions: list[str]) -> pd.DataFrame:
     return merged.sort_values("complaints", ascending=False)
 
 
-def build_model(
+def _build_model_into(
     source: Path,
     output_dir: Path,
     start_date: pd.Timestamp,
     chunksize: int,
-) -> None:
-    output_dir.mkdir(parents=True, exist_ok=True)
+) -> int:
     fact_path = output_dir / "fact_complaints.csv"
-    if fact_path.exists():
-        fact_path.unlink()
 
     groups = {
         "monthly": ["received_month"],
@@ -127,6 +125,22 @@ def build_model(
             index=False,
         )
 
+    return rows_written
+
+
+def build_model(
+    source: Path,
+    output_dir: Path,
+    start_date: pd.Timestamp,
+    chunksize: int,
+) -> None:
+    """Stage every output before replacing a previous successful build."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    with TemporaryDirectory(prefix=".complaints-build-", dir=output_dir) as temporary:
+        staging = Path(temporary)
+        rows_written = _build_model_into(source, staging, start_date, chunksize)
+        for staged in staging.iterdir():
+            staged.replace(output_dir / staged.name)
     print(f"Wrote {rows_written:,} complaint records to {output_dir}")
 
 

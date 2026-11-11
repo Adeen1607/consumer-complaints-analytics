@@ -57,3 +57,25 @@ def test_all_unknown_disputes_yield_blank_rate(tmp_path):
     score = pd.read_csv(output / "company_scorecard.csv").iloc[0]
     assert score["dispute_observations"] == 0
     assert pd.isna(score["dispute_rate"])
+
+
+def test_failed_rebuild_preserves_previous_successful_outputs(tmp_path):
+    output = tmp_path / "processed"
+    output.mkdir()
+    previous_fact = output / "fact_complaints.csv"
+    previous_scorecard = output / "company_scorecard.csv"
+    previous_fact.write_text("previous fact data")
+    previous_scorecard.write_text("previous scorecard")
+
+    record = {column: "" for column in USE_COLUMNS}
+    record.update({"Complaint ID": 1, "Date received": "2020-01-01"})
+    source = tmp_path / "complaints.csv"
+    pd.DataFrame([record]).to_csv(source, index=False)
+
+    import pytest
+
+    with pytest.raises(ValueError, match="No complaint rows matched"):
+        build_model(source, output, pd.Timestamp("2025-01-01"), chunksize=1)
+    assert previous_fact.read_text() == "previous fact data"
+    assert previous_scorecard.read_text() == "previous scorecard"
+    assert not list(output.glob(".complaints-build-*"))
